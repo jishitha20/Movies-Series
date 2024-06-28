@@ -15,7 +15,7 @@ const Item = styled(Paper)(({ theme }) => ({
   }));
   
 
-const MovieList = (props) => {
+const FavouriteList = (props) => {
     console.log(props)
     return(
         <Box sx={{ flexGrow: 1 }}>
@@ -24,6 +24,7 @@ const MovieList = (props) => {
                         props.movies.map(function (movie) {
                             return(
                                 <Grid item xs={12} md={6} lg={4}  >
+                                    <Item>
                                         <Movie
                                             Title= {movie.Title} 
                                             Year= {movie.Year}
@@ -32,6 +33,7 @@ const MovieList = (props) => {
                                             imdbID = {movie.imdbID}
                                                                                   
                                         />
+                                    </Item>
                                 </Grid>
                             )    
                         }) 
@@ -40,4 +42,4 @@ const MovieList = (props) => {
         </Box> 
     )
 }
-export default MovieList;
+export default FavouriteList;

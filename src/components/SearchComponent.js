@@ -7,7 +7,8 @@ import MovieList from "./MovieList";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
-import {use, useNavigate} from 'react-router-dom';
+import Pagination from '@mui/material/Pagination';
+
 
 
 const defaultTheme = createTheme();
@@ -16,8 +17,27 @@ const defaultTheme = createTheme();
 
 const SearchComponent = () => {
 
-  const [searchTerm, setSearchTerm] = useState([]);
-  const navigate = useNavigate();
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchData, setSearchData] = useState({})
+  const [favourites,setFavourites] = useState({})
+
+
+  const handleAddFavourites = (data) =>{
+     const updatedData  = {[data.id]:data}
+     setFavourites((prev)=>({...prev,updatedData}))
+  }
+
+
+  const handleFetchMovies = async(pageNumber)=>{
+    
+    try{
+      const movies = await fetchMovies({...searchData,page:pageNumber});
+      setSearchResults(movies);       
+    }
+    catch(err){
+     console.log(err)
+    }
+  }
   
   const handleSearchInputChanges = async(e) => {
     e.preventDefault();
@@ -27,25 +47,25 @@ const SearchComponent = () => {
       type: data.get('type'),
       year: data.get('year'),
       imdbID: data.get('imdbID'),
+      page:page
     }
-    try{
-      const movies = await fetchMovies(newReq);
-      setSearchTerm(()=>{
-        return movies;
-      }); 
-      
-    }
-    catch(err){
-     console.log(err)
-    }
+    console.log(newReq)
+    setSearchData(newReq)
 
+    handleFetchMovies(page);
    
   //  resetSearchField();
   }
   
   const resetSearchField = () => {
-    setSearchTerm("");
+    searchResults("");
   }
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event,value) => {
+    handleFetchMovies(value)
+    setPage(value);
+   
+  };
 
   
 
@@ -93,9 +113,12 @@ const SearchComponent = () => {
               id="year"
               autoComplete="current-password"
             />
-            <Button type="submit" component="" to=""><SearchIcon /></Button>
+            <Button type="submit" ><SearchIcon /></Button>
+            <Pagination count={10} shape="rounded" 
+          page={page} onChange={handleChange} />
             
-          { searchTerm && <MovieList movies={searchTerm}/>}
+          { searchResults && page &&  <MovieList movies={searchResults}/>}
+         
           </Box>
         </Box>
       </Container>

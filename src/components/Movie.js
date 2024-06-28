@@ -1,5 +1,9 @@
 import {use, useNavigate} from 'react-router-dom';
 import {useParams} from 'react-router-dom';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
 
 
 
@@ -8,17 +12,29 @@ function Movie(props){
     const navigate = useNavigate();
 
     const goToMovieHandler=()=>{
-        console.log(props)
         navigate(`/${props.imdbID}`)
     }
 
-    return <figure onClick={goToMovieHandler} >
-        <img width="200px"src={props.image}/>
-        <h2>{props.Title}</h2>
-        <h3>{props.Year}</h3>
-        <p>{props.Type}</p>
-        <img width="200px"src={props.Poster}/>
-        <p>{props.imdbID}</p>
-    </figure>
+    return (
+    <Card  onClick={goToMovieHandler} sx={{ maxWidth:345 }}>
+        <CardMedia
+            component="img"
+            sx={{ height: 140 }}
+            image={props.Poster}
+            alt="Image of a product"
+            title={props.Title} 
+                
+        />
+        <CardContent sx={{ flex: '1 0 auto' }}>
+            <Typography component="div">
+                Year: {props.Year}
+            </Typography>
+            <Typography component="div">
+                Type : {props.Type} 
+            </Typography>
+        </CardContent>
+    </Card>
+    )
+   
 }
 export default Movie;

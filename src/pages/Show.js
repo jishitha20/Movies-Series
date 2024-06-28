@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect,useState } from 'react';
 import {useParams} from 'react-router-dom';
 import { fetchMovieByimdbID } from '../lib/api';
-import Movie from '../components/Movie';
+import DetailMovie from '../components/DetailMovie';
 
 const Show = () => {
     const {imdbID} = useParams();
@@ -12,6 +12,7 @@ const Show = () => {
         try{
           const data =  await fetchMovieByimdbID(imdbID);
           setMovie(data);
+          console.log(data)
         }
         catch(e){
           console.log('Cannot fetch the data' +e);
@@ -24,14 +25,19 @@ const Show = () => {
     <div>
       {
         movie &&
-        <Movie 
+        <DetailMovie 
             Title= {movie.Title} 
             Year= {movie.Year}
             Type= {movie.Type} 
             Poster={movie.Poster}  
-            imdbID = {movie.imdbID}  
+            imdbID = {movie.imdbID} 
+            Released={movie.Released}  
+            Runtime = {movie.Runtime} 
+            Genre={movie.Genre}  
+            imdbRating = {movie.imdbRating}  
+            Director={movie.Director}
         />
-      }
+        }
     </div>
   )
 }

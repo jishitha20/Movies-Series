@@ -15,12 +15,26 @@ const Item = styled(Paper)(({ theme }) => ({
   
 
 const MovieList = (props) => {
-   console.log("abc")
+    console.log(props)
     return(
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}> 
                     {
-                        console.log(props)
+                        props.movies.map(function (movie) {
+                            return(
+                                <Grid item xs={12} md={6} lg={4}  >
+                                    <Item>
+                                        <Movie
+                                            Title= {movie.Title} 
+                                            Year= {movie.Year}
+                                            Type= {movie.Type} 
+                                            Poster={movie.Poster}  
+                                            imdbID = {movie.imdbID}                                        
+                                        />
+                                    </Item>
+                                </Grid>
+                            )    
+                        }) 
                     }  
             </Grid>
         </Box> 

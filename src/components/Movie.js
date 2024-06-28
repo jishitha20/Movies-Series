@@ -1,17 +1,24 @@
-import Button from '@mui/material/Button';
-
+import {use, useNavigate} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 
 
 
 function Movie(props){
+    const {imdbID} = useParams();
+    const navigate = useNavigate();
 
-    return <figure >
+    const goToMovieHandler=()=>{
+        console.log(props)
+        navigate(`/${props.imdbID}`)
+    }
+
+    return <figure onClick={goToMovieHandler} >
         <img width="200px"src={props.image}/>
-        <h2>{props.title}</h2>
-        <h3>${props.price}</h3>
-        <p>{props.description.substring(0,50)}</p>
-        <Button  variant="outlined">Add To Favourites</Button>
-
+        <h2>{props.Title}</h2>
+        <h3>{props.Year}</h3>
+        <p>{props.Type}</p>
+        <img width="200px"src={props.Poster}/>
+        <p>{props.imdbID}</p>
     </figure>
 }
 export default Movie;

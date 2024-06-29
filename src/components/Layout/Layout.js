@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import MainNavigation from '../MainNavigation';
+import { ToastContainer } from 'react-toastify';
+
 
 const Layout = (props) => {
   return (
@@ -8,7 +10,8 @@ const Layout = (props) => {
             <MainNavigation></MainNavigation>
         </header>
         <main>
-          {props.children}
+            <ToastContainer/>
+            {props.children}
         </main>
         <footer>
 

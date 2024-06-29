@@ -3,8 +3,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import Button from '@mui/material/Button';
 import {useSelector} from "react-redux"
 import Switch from "@mui/material/Switch"
 
@@ -20,7 +18,6 @@ function DetailMovie(props){
     const favourites = useSelector((state)=>state.fav.favourites) 
     const data = Object.values(favourites)
     
-    console.log(favourites)
     const toggleFavorite = () => {
         if(!favourites[props.imdbID]){
             dispatch(addFavourite(props))
@@ -65,12 +62,6 @@ function DetailMovie(props){
                 onClick={()=>toggleFavorite()}
                         checked= {favourites[props.imdbID]? true:false}
                 />
-                {/* <Button  onClick={()=>toggleFavorite()} >
-                    <FavoriteBorderOutlinedIcon/>
-                
-              </Button> */}
-              
-              {/* {favourites[props.imdbID]? "A":"B"} */}
             </CardContent>
     </Card>
     )

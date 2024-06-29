@@ -12,7 +12,6 @@ const Show = () => {
         try{
           const data =  await fetchMovieByimdbID(imdbID);
           setMovie(data);
-          console.log(data)
         }
         catch(e){
           console.log('Cannot fetch the data' +e);

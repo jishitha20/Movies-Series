@@ -1,37 +1,41 @@
 import React, { useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
-import { fetchMovies } from "../lib/api";
-import { Box, Button } from '@mui/material';
-import { TextField ,Grid} from '@mui/material';
+import { fetchFavMovies, fetchMovies } from "../lib/api";
+import { Box, Button ,Grid} from '@mui/material';
+import { TextField } from '@mui/material';
 import MovieList from "./MovieList";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Pagination from '@mui/material/Pagination';
 
+
+
 const defaultTheme = createTheme();
 
-const SearchComponent = () => {
 
+
+const FavouriteSearch = (props) => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchData, setSearchData] = useState({})
-  const [favourites,setFavourites] = useState({})
 
-
-  const handleAddFavourites = (data) =>{
-     const updatedData  = {[data.id]:data}
-     setFavourites((prev)=>({...prev,updatedData}))
-  }
-
-
-  const handleFetchMovies = async(pageNumber)=>{
+  const handleFetchFavMovies = async(pageNumber)=>{
     
     try{
-      const movies = await fetchMovies({...searchData,page:pageNumber});
-      setSearchResults(movies);       
+        const movies = props.data.filter((item) =>
+            item.Title.toLowerCase().includes(searchData.title.toLowerCase())
+
+          );
+        if(movies.length===0)
+           {
+                console.log("No data")
+                return <h2>Favourites is empty</h2>
+           } 
+      setSearchResults(movies);  
     }
+    
     catch(err){
-      console.log(err)
+     console.log(err)
     }
   }
   
@@ -40,21 +44,19 @@ const SearchComponent = () => {
     const data = new FormData(e.currentTarget);
     const newReq = {
       title: data.get('title'),
-      type: data.get('type'),
-      year: data.get('year'),
       imdbID: data.get('imdbID'),
       page:page
     }
-    console.log(newReq)
     setSearchData(newReq)
 
-    handleFetchMovies(page);
-    }
+    handleFetchFavMovies(page);
+   
+  }
   
   
   const [page, setPage] = React.useState(1);
   const handleChange = (event,value) => {
-    handleFetchMovies(value)
+    handleFetchFavMovies(value)
     setPage(value);
    
   };
@@ -63,7 +65,7 @@ const SearchComponent = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main">
+      <Container component="main" maxWidth= "xs" >
         <CssBaseline />
         <Box
           sx={{
@@ -87,25 +89,6 @@ const SearchComponent = () => {
                 autoComplete="title"
                 autoFocus
               />
-                
-            <TextField
-                margin="normal"
-                fullWidth
-                id="type"
-                label="type"
-                name="type"
-                autoComplete="type"
-                autoFocus
-              />  
-            <TextField
-              margin="normal"
-              fullWidth
-              name="year"
-              label="year"
-              type="year"
-              id="year"
-              autoComplete="current-password"
-            />
             <Grid container justifyContent="center" spacing={2}>
                 <Grid item>
                     <Button type="submit" >Search</Button>
@@ -114,7 +97,7 @@ const SearchComponent = () => {
             
           { searchResults && page &&  <MovieList movies={searchResults}/>}
           { searchResults && <Pagination count={10} shape="rounded" 
-          page={page} onChange={handleChange} sx={{m:3}} />} 
+          page={page} onChange={handleChange} sx={{m:3}} />}
          
           </Box>
         </Box>
@@ -126,4 +109,4 @@ const SearchComponent = () => {
 
 }
 
-export default SearchComponent;
+export default FavouriteSearch;

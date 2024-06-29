@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 
 
 function Movie(props){
-    const {imdbID} = useParams();
     const navigate = useNavigate();
 
     const goToMovieHandler=()=>{
@@ -16,11 +15,16 @@ function Movie(props){
     }
 
     return (
-    <Card  onClick={goToMovieHandler} sx={{ maxWidth:345 ,top: '25%', m:2}}>
+    <Card  onClick={goToMovieHandler} sx={{ 
+        width: '30vw',
+        top: '25%', 
+        m:2,
+        display: 'block',
+        transitionDuration: '0.3s',
+        height: '30vw'}}>
         <CardMedia
-        
             component="img"
-            sx={{ height: 140,resize:'cover' }}
+            sx={{ height: 250,objectFit: 'cover'}}
             image={props.Poster}
             alt="Image of a product"
             title={props.Title} 

@@ -13,10 +13,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
   <Layout>
-  <Provider store={store}>
-      
-        <App />
-      
+  <Provider store={store}> 
+      <App /> 
     </Provider>
   </Layout>
     

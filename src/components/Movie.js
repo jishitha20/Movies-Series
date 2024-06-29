@@ -16,16 +16,20 @@ function Movie(props){
     }
 
     return (
-    <Card  onClick={goToMovieHandler} sx={{ maxWidth:345 }}>
+    <Card  onClick={goToMovieHandler} sx={{ maxWidth:345 ,top: '25%', m:2}}>
         <CardMedia
+        
             component="img"
-            sx={{ height: 140 }}
+            sx={{ height: 140,resize:'cover' }}
             image={props.Poster}
             alt="Image of a product"
             title={props.Title} 
-                
+                            
         />
         <CardContent sx={{ flex: '1 0 auto' }}>
+            <Typography component="div">
+                Title: {props.Title}
+            </Typography>
             <Typography component="div">
                 Year: {props.Year}
             </Typography>

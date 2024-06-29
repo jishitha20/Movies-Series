@@ -71,10 +71,11 @@ const SearchComponent = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth= "xs" >
         <CssBaseline />
         <Box
           sx={{
+            
             marginTop: 1,
             display: 'flex',
             flexDirection: 'column',
@@ -82,7 +83,7 @@ const SearchComponent = () => {
           }}
         >
           
-          <Box component="form" onSubmit={handleSearchInputChanges} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSearchInputChanges} noValidate sx={{ mt: 1,maxwidth:"lg" }}>
 
           <TextField
                 margin="normal"
@@ -114,8 +115,8 @@ const SearchComponent = () => {
               autoComplete="current-password"
             />
             <Button type="submit" ><SearchIcon /></Button>
-            <Pagination count={10} shape="rounded" 
-          page={page} onChange={handleChange} />
+            { searchResults && <Pagination count={10} shape="rounded" 
+          page={page} onChange={handleChange} />}
             
           { searchResults && page &&  <MovieList movies={searchResults}/>}
          

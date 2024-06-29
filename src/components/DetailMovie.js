@@ -17,13 +17,11 @@ function DetailMovie(props){
     const navigate = useNavigate();
     const dispatch = useDispatch()
 
-    const favourites = useSelector((state)=>state.fav.favourites) // Read data from store
-
+    const favourites = useSelector((state)=>state.fav.favourites) 
     const data = Object.values(favourites)
     
     console.log(favourites)
     const toggleFavorite = () => {
-        console.log("he2")
         if(!favourites[props.imdbID]){
             dispatch(addFavourite(props))
         }
@@ -33,11 +31,11 @@ function DetailMovie(props){
       };
 
     return (
-        <Card sx={{ maxWidth:345,width: 'auto',
+        <Card sx={{ maxWidth:345,
             position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate('-50%', '-50%') '}}>
+            top: '25%',
+            left: '40%',
+            }}>
             <CardMedia
                 component="img"
                 sx={{height: 240}}

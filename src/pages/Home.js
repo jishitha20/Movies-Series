@@ -3,7 +3,9 @@ import SearchComponent from '../components/SearchComponent';
 
 const Home = () => {
   return (
-    <div>
+    <div style={{ 
+      
+    }}>
         <SearchComponent/>
         
     </div>

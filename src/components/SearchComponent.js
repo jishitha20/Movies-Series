@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useEffect, useState } from "react";
 import { fetchMovies } from "../lib/api";
 import { Box, Button } from '@mui/material';
 import { TextField ,Grid} from '@mui/material';
@@ -8,6 +7,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Pagination from '@mui/material/Pagination';
+import {toast} from 'react-toastify';
 
 const defaultTheme = createTheme();
 
@@ -15,23 +15,17 @@ const SearchComponent = () => {
 
   const [searchResults, setSearchResults] = useState([]);
   const [searchData, setSearchData] = useState({})
-  const [favourites,setFavourites] = useState({})
 
-
-  const handleAddFavourites = (data) =>{
-     const updatedData  = {[data.id]:data}
-     setFavourites((prev)=>({...prev,updatedData}))
-  }
-
-
-  const handleFetchMovies = async(pageNumber)=>{
+  const handleFetchMovies = async(searchReqData, pageNumber)=>{
     
+    const searchWith = searchReqData ?? searchData;
     try{
-      const movies = await fetchMovies({...searchData,page:pageNumber});
+      const movies = await fetchMovies({...searchWith,page:pageNumber});
       setSearchResults(movies);       
     }
     catch(err){
-      console.log(err)
+      setSearchResults([]); 
+      toast.error(err.message);
     }
   }
   
@@ -45,16 +39,14 @@ const SearchComponent = () => {
       imdbID: data.get('imdbID'),
       page:page
     }
-    console.log(newReq)
     setSearchData(newReq)
-
-    handleFetchMovies(page);
+    handleFetchMovies(newReq,page);
     }
   
   
   const [page, setPage] = React.useState(1);
   const handleChange = (event,value) => {
-    handleFetchMovies(value)
+    handleFetchMovies(undefined,value)
     setPage(value);
    
   };
@@ -67,7 +59,6 @@ const SearchComponent = () => {
         <CssBaseline />
         <Box
           sx={{
-            
             marginTop: 1,
             display: 'flex',
             flexDirection: 'column',
@@ -75,8 +66,7 @@ const SearchComponent = () => {
           }}
         >
           
-          <Box component="form" onSubmit={handleSearchInputChanges} noValidate sx={{ mt: 1,maxwidth:"lg" }}>
-
+        <Box component="form" onSubmit={handleSearchInputChanges} noValidate sx={{ mt: 1,maxwidth:"lg" }}>
           <TextField
                 margin="normal"
                 required
@@ -86,9 +76,8 @@ const SearchComponent = () => {
                 name="title"
                 autoComplete="title"
                 autoFocus
-              />
-                
-            <TextField
+              />   
+          <TextField
                 margin="normal"
                 fullWidth
                 id="type"
@@ -97,33 +86,31 @@ const SearchComponent = () => {
                 autoComplete="type"
                 autoFocus
               />  
-            <TextField
+          <TextField
               margin="normal"
               fullWidth
               name="year"
               label="year"
               type="year"
               id="year"
-              autoComplete="current-password"
+              autoComplete="year"
+              autoFocus
             />
-            <Grid container justifyContent="center" spacing={2}>
-                <Grid item>
-                    <Button type="submit" >Search</Button>
-                </Grid>
-            </Grid>
+          <Grid container justifyContent="center" spacing={2}>
+              <Grid item>
+                  <Button type="submit" >Search</Button>
+              </Grid>
+          </Grid>
             
           { searchResults && page &&  <MovieList movies={searchResults}/>}
           { searchResults && <Pagination count={10} shape="rounded" 
-          page={page} onChange={handleChange} sx={{m:3}} />} 
+            page={page} onChange={handleChange} sx={{m:3}} />} 
          
-          </Box>
         </Box>
-      </Container>
-    </ThemeProvider>
-    
-      
-    );
-
+      </Box>
+    </Container>
+  </ThemeProvider>  
+  );
 }
 
 export default SearchComponent;

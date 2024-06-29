@@ -2,6 +2,8 @@ import React, { useContext, useEffect,useState } from 'react';
 import {useParams} from 'react-router-dom';
 import { fetchMovieByimdbID } from '../lib/api';
 import DetailMovie from '../components/DetailMovie';
+import {toast} from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const Show = () => {
     const {imdbID} = useParams();
@@ -14,7 +16,7 @@ const Show = () => {
           setMovie(data);
         }
         catch(e){
-          console.log('Cannot fetch the data' +e);
+          toast.error(e.message);
         }
       })()
       

@@ -14,6 +14,7 @@ const Favourites = () => {
     return(
         <div>
             <FavouriteSearch data={data}/>
+            <h2>Favourites</h2>
             <MovieList  movies={data}/>
         </div>
         

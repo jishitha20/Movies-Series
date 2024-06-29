@@ -7,7 +7,8 @@ import MovieList from "./MovieList";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
-import Pagination from '@mui/material/Pagination';
+import {toast} from 'react-toastify';
+
 
 
 
@@ -19,23 +20,30 @@ const FavouriteSearch = (props) => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchData, setSearchData] = useState({})
 
-  const handleFetchFavMovies = async(pageNumber)=>{
+  const handleFetchFavMovies = async(searchReqData)=>{
     
+    const searchWith = searchReqData ?? searchData;
+    if(!searchWith.title){
+      return toast.error("Movies not found");
+    }
     try{
         const movies = props.data.filter((item) =>
-            item.Title.toLowerCase().includes(searchData.title.toLowerCase())
-
-          );
+           item && item.Title.toLowerCase().includes(searchWith.title.toLowerCase())
+        );
         if(movies.length===0)
            {
-                console.log("No data")
-                return <h2>Favourites is empty</h2>
+            setSearchResults([]);
+            toast.error("No movies Found");
            } 
-      setSearchResults(movies);  
+           else{
+            setSearchResults(movies); 
+           }
+       
     }
     
     catch(err){
-     console.log(err)
+      setSearchResults([]);
+      toast.error(err.message) 
     }
   }
   
@@ -45,31 +53,20 @@ const FavouriteSearch = (props) => {
     const newReq = {
       title: data.get('title'),
       imdbID: data.get('imdbID'),
-      page:page
     }
     setSearchData(newReq)
 
-    handleFetchFavMovies(page);
+    handleFetchFavMovies(newReq);
    
   }
-  
-  
-  const [page, setPage] = React.useState(1);
-  const handleChange = (event,value) => {
-    handleFetchFavMovies(value)
-    setPage(value);
-   
-  };
-
   
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth= "xs" >
+      <Container component="main"  >
         <CssBaseline />
         <Box
           sx={{
-            
             marginTop: 1,
             display: 'flex',
             flexDirection: 'column',
@@ -77,7 +74,7 @@ const FavouriteSearch = (props) => {
           }}
         >
           
-          <Box component="form" onSubmit={handleSearchInputChanges} noValidate sx={{ mt: 1,maxwidth:"lg" }}>
+        <Box component="form" onSubmit={handleSearchInputChanges} noValidate sx={{ mt: 1 }}>
 
           <TextField
                 margin="normal"
@@ -94,10 +91,8 @@ const FavouriteSearch = (props) => {
                     <Button type="submit" >Search</Button>
                 </Grid>
             </Grid>
-            
-          { searchResults && page &&  <MovieList movies={searchResults}/>}
-          { searchResults && <Pagination count={10} shape="rounded" 
-          page={page} onChange={handleChange} sx={{m:3}} />}
+          { searchResults  &&  <MovieList movies={searchResults}/>}
+        
          
           </Box>
         </Box>
